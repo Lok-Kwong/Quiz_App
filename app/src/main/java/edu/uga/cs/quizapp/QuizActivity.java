@@ -26,13 +26,12 @@ public class QuizActivity extends AppCompatActivity {
     private static final String DEBUG_TAG = "Quiz Activity";
 
     Context context = this;
-    boolean initialData = true;
     private TextView textViewQuestion;
     private RadioGroup rbGroup;
     private RadioButton rb1;
     private RadioButton rb2;
     private RadioButton rb3;
-    private QuizData quizData = null;
+    private QuizData quizData;
     List<Question> results;
 
     @Override
@@ -48,14 +47,7 @@ public class QuizActivity extends AppCompatActivity {
 
 
         Log.d( DEBUG_TAG, "Database: " + doesDatabaseExist(context, "quizapp.db"));
-
         quizData = new QuizData( this );
-
-        // GET INITIAL DATA FROM state_capital.csv -> Make initialData = false if not
-        if (!initialData) {
-            // Execute the retrieval of the CSV file in an asynchronous way, without blocking the UI thread.
-            new getIntialCSVDataTask().execute();
-        }
         new retrieveAllQuestionsTask().execute();
     }
 
@@ -84,7 +76,14 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
-    // This is an AsyncTask class (it extends AsyncTask) to perform DB writing of a job lead, asynchronously.
+    // Execute the retrieval of the CSV file in an asynchronous way, without blocking the UI thread.
+    // Called by DBHelper in the onCreate method bc of csv file getting needing an activity
+    public void setInitialData() {
+        new getIntialCSVDataTask().execute();
+    }
+
+    // This is an AsyncTask class (it extends AsyncTask) to perform grab csv file data and calls
+    // quizData to insert into db.
     private class getIntialCSVDataTask extends AsyncTask<Void, Void, Void> {
 
         // This method will run as a background process to write into db.
@@ -110,12 +109,6 @@ public class QuizActivity extends AppCompatActivity {
                     System.out.println("Second city : " + nextLine[2]);
                     System.out.println("Third city : " + nextLine[3]);
                     System.out.println("==========================");
-                    //                Question question = new Question();
-                    //                question.setState(nextLine[0]);
-                    //                question.setCapital(nextLine[1]);
-                    //                question.setCity1(nextLine[2]);
-                    //                question.setCity2(nextLine[3]);
-                    //                questions.add(question);
                     ContentValues values = new ContentValues();
                     values.put(QuizDBHelper.QUIZQUESTIONS_COLUMN_STATE, nextLine[0]);
                     values.put(QuizDBHelper.QUIZQUESTIONS_COLUMN_CAPITAL, nextLine[1]);

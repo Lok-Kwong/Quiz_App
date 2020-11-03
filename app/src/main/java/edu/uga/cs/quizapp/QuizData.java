@@ -119,7 +119,6 @@ public class QuizData {
         // and returned as from the insert method call.
         long id = db.insert( QuizDBHelper.TABLE_QUIZQUESTIONS, null, values );
         Log.d( DEBUG_TAG, "Stored new result with id: " + id );
-
     }
 
     // Store results of the quiz into the database.

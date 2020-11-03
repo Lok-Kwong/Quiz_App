@@ -21,7 +21,7 @@ public class QuizDBHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "quizapp.db";
     private static final int DB_VERSION = 2;
 
-    private QuizData quizData = null;
+    private QuizActivity quizActivity = new QuizActivity(); // Call method to create initial data
 
     // Define all names for table quizQuestions and columns id, state, capital, city1, and city2
     public static final String TABLE_QUIZQUESTIONS = "quizQuestions";
@@ -98,6 +98,7 @@ public class QuizDBHelper extends SQLiteOpenHelper {
         Log.d( DEBUG_TAG, "Table " + TABLE_QUIZQUESTIONS + " created" );
         db.execSQL( CREATE_QUIZRESULTS );
         Log.d( DEBUG_TAG, "Table " + TABLE_QUIZRESULTS + " created" );
+        quizActivity.setInitialData();
     }
 
     // We should override onUpgrade method, which will be used to upgrade the database if
