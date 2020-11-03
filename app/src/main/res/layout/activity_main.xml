@@ -7,8 +7,8 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:layout_width="178dp"
-        android:layout_height="50dp"
+        android:layout_width="203dp"
+        android:layout_height="105dp"
         android:text="State Capital Quiz"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"

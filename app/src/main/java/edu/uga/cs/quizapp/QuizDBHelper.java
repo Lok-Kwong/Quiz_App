@@ -2,6 +2,7 @@ package edu.uga.cs.quizapp;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.util.Log;
 
 /**
@@ -14,10 +15,13 @@ import android.util.Log;
  * Access to the only instance is via the getInstance method.
  */
 public class QuizDBHelper extends SQLiteOpenHelper {
+
     private static final String DEBUG_TAG = "QuizDBHelper";
 
     private static final String DB_NAME = "quizapp.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
+
+    private QuizData quizData = null;
 
     // Define all names for table quizQuestions and columns id, state, capital, city1, and city2
     public static final String TABLE_QUIZQUESTIONS = "quizQuestions";
@@ -94,7 +98,6 @@ public class QuizDBHelper extends SQLiteOpenHelper {
         Log.d( DEBUG_TAG, "Table " + TABLE_QUIZQUESTIONS + " created" );
         db.execSQL( CREATE_QUIZRESULTS );
         Log.d( DEBUG_TAG, "Table " + TABLE_QUIZRESULTS + " created" );
-
     }
 
     // We should override onUpgrade method, which will be used to upgrade the database if
@@ -108,4 +111,5 @@ public class QuizDBHelper extends SQLiteOpenHelper {
         Log.d( DEBUG_TAG, "Table " + TABLE_QUIZQUESTIONS + " upgraded" );
         Log.d( DEBUG_TAG, "Table " + TABLE_QUIZRESULTS + " upgraded" );
     }
+
 }
