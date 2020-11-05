@@ -181,7 +181,7 @@ public class QuizData {
                     String question6 = cursor.getString( cursor.getColumnIndex( QuizDBHelper.QUIZRESULTS_COLUMN_QUESTION6 ) );
 
                     // create a new question object and set its state to the retrieved values
-                    Result result = new Result( time, score, position, question1, question2,question3, question4, question5, question6 );
+                    Result result = new Result( time, score, position, question1, question2, question3, question4, question5, question6 );
                     result.setId( id ); // set the id (the primary key) of this object
                     // add it to the list
                     results.add( result );

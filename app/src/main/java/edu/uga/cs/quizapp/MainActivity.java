@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private class NewQuizButtonClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(view.getContext(), QuizActivity.class);
+            Intent intent = new Intent(view.getContext(), QuizViewPager.class);
             view.getContext().startActivity( intent );
         }
     }

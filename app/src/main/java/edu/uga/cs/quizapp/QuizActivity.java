@@ -25,55 +25,19 @@ public class QuizActivity extends AppCompatActivity {
 
     private static final String DEBUG_TAG = "Quiz Activity";
 
-    Context context = this;
-    private TextView textViewQuestion;
-    private RadioGroup rbGroup;
-    private RadioButton rb1;
-    private RadioButton rb2;
-    private RadioButton rb3;
     private QuizData quizData;
-    List<Question> results;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quiz);
 
-        textViewQuestion = findViewById( R.id.questionText );
-        rbGroup = findViewById( R.id.radio_group );
-        rb1 = findViewById( R.id.option1 );
-        rb2 = findViewById( R.id.option2 );
-        rb3 = findViewById( R.id.option3 );
-
-
-        Log.d( DEBUG_TAG, "Database: " + doesDatabaseExist(context, "quizapp.db"));
+        Log.d( DEBUG_TAG, "Database: " + doesDatabaseExist(this, "quizapp.db"));
         quizData = new QuizData( this );
-        new retrieveAllQuestionsTask().execute();
     }
 
     private static boolean doesDatabaseExist(Context context, String dbName) {
         File dbFile = context.getDatabasePath(dbName);
         return dbFile.exists();
-    }
-
-    // This is an AsyncTask class (it extends AsyncTask) to perform DB writing of a job lead, asynchronously.
-    private class retrieveAllQuestionsTask extends AsyncTask<Void, Void, Void> {
-
-        // This method will run as a background process to write into db.
-        // It will be automatically invoked by Android, when we call the execute method
-        // in the onCreateMethod
-        @Override
-        protected Void doInBackground(Void... voids) {
-            quizData.open();
-            results = quizData.retrieveAllQuestions();
-
-            textViewQuestion.setText("What is the capital of " + String.valueOf(results.get(49).getState()) + "?");
-            rb1.setText(results.get(49).getCity1());
-            rb2.setText(results.get(49).getCity2());
-            rb3.setText(results.get(49).getCapital());
-            Log.d( DEBUG_TAG, "getIntialCSVDataTask: quiz questions retrieved: ");
-            return null;
-        }
     }
 
     // Execute the retrieval of the CSV file in an asynchronous way, without blocking the UI thread.
@@ -129,49 +93,5 @@ public class QuizActivity extends AppCompatActivity {
             Log.d( DEBUG_TAG, "getIntialCSVDataTask: quiz questions retrieved: ");
             return null;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        Log.d( DEBUG_TAG, "QuizActivity.onResume()" );
-        // open the database in onResume
-        if( quizData != null )
-            quizData.open();
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        Log.d( DEBUG_TAG, "QuizActivity.onPause()" );
-        // close the database in onPause
-        if( quizData != null )
-            quizData.close();
-        super.onPause();
-    }
-
-    // The following activity callback methods are not needed and are for
-    // educational purposes only.
-    @Override
-    protected void onStart() {
-        Log.d( DEBUG_TAG, "QuizActivity.onStart()" );
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        Log.d( DEBUG_TAG, "QuizActivity.onStop()" );
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.d( DEBUG_TAG, "QuizActivity.onDestroy()" );
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onRestart() {
-        Log.d( DEBUG_TAG, "QuizActivity.onRestart()" );
-        super.onRestart();
     }
 }
