@@ -4,28 +4,28 @@ public class Result {
     private long id;
     private String time;
     private int score;
-    private int position;
-    private String question1;
-    private String question2;
-    private String question3;
-    private String question4;
-    private String question5;
-    private String question6;
+    private long position;
+    private long question1;
+    private long question2;
+    private long question3;
+    private long question4;
+    private long question5;
+    private long question6;
 
     public Result() {
         this.id = -1;
         this.time = null;
         this.score = 0;
         this.position = 0;
-        this.question1 = null;
-        this.question2 = null;
-        this.question3 = null;
-        this.question4 = null;
-        this.question5 = null;
-        this.question6 = null;
+        this.question1 = 0;
+        this.question2 = 0;
+        this.question3 = 0;
+        this.question4 = 0;
+        this.question5 = 0;
+        this.question6 = 0;
     }
 
-    public Result(String time, int score, int position, String question1, String question2, String question3, String question4, String question5, String question6) {
+    public Result(String time, int score, int position, long question1, long question2, long question3, long question4, long question5, long question6) {
         this.id = -1;
         this.time = time;
         this.score = score;
@@ -62,59 +62,59 @@ public class Result {
         this.score = score;
     }
 
-    public int getPosition() {
+    public long getPosition() {
         return position;
     }
 
-    public void setPosition(int position) {
+    public void setPosition(long position) {
         this.position = position;
     }
 
-    public String getQuestion1() {
+    public long getQuestion1() {
         return question1;
     }
 
-    public void setQuestion1(String question1) {
+    public void setQuestion1(long question1) {
         this.question1 = question1;
     }
 
-    public String getQuestion2() {
+    public long getQuestion2() {
         return question2;
     }
 
-    public void setQuestion2(String question2) {
+    public void setQuestion2(long question2) {
         this.question2 = question2;
     }
 
-    public String getQuestion3() {
+    public long getQuestion3() {
         return question3;
     }
 
-    public void setQuestion3(String question3) {
+    public void setQuestion3(long question3) {
         this.question3 = question3;
     }
 
-    public String getQuestion4() {
+    public long getQuestion4() {
         return question4;
     }
 
-    public void setQuestion4(String question4) {
+    public void setQuestion4(long question4) {
         this.question4 = question4;
     }
 
-    public String getQuestion5() {
+    public long getQuestion5() {
         return question5;
     }
 
-    public void setQuestion5(String question5) {
+    public void setQuestion5(long question5) {
         this.question5 = question5;
     }
 
-    public String getQuestion6() {
+    public long getQuestion6() {
         return question6;
     }
 
-    public void setQuestion6(String question6) {
+    public void setQuestion6(long question6) {
         this.question6 = question6;
     }
 

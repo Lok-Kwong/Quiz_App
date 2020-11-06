@@ -9,10 +9,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ReviewResults"
-            android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".QuizViewPager"
-            android:parentActivityName=".MainActivity"/>
+
+        <activity
+            android:name=".FinalResultScreen"
+            android:label="@string/title_activity_final_result_screen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ReviewResults"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".QuizViewPager"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".QuizActivity">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/questionText"
@@ -21,7 +20,7 @@
         app:layout_constraintVertical_bias="0.254" />
 
     <RadioGroup
-        android:id="@+id/radio_group"
+        android:id="@+id/radioGroup"
         android:layout_width="353dp"
         android:layout_height="169dp"
         android:layout_marginStart="10dp"

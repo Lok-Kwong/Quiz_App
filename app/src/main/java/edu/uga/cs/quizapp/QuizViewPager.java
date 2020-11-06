@@ -1,5 +1,8 @@
 package edu.uga.cs.quizapp;
 
+import android.content.ContentValues;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -18,24 +21,30 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import java.util.ArrayList;
+import com.opencsv.CSVReader;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class QuizViewPager extends AppCompatActivity {
-    private static final String DEBUG_TAG = "Quiz Activity";
+    private static final String DEBUG_TAG = "Quiz View Pager";
 
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
     ActionBar mActionBar;
     final int numberQuestions = 6;
+    int currentPos = 0;
+    int score = 0;
     static List<Question> questions;
+    static List<Boolean> numCorrect = Arrays.asList(false, false, false, false, false, false);
+
     private QuizData quizData;
 
-    private RadioGroup radioGroup;
-    private RadioButton radioButton;
-
+    private boolean isLastPageSwiped;
+    private int counterPageScroll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +64,35 @@ public class QuizViewPager extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                //Here 5 is last position
+                if (position == 5 && positionOffset == 0 && !isLastPageSwiped){
+                    if(counterPageScroll != 0){
+                        isLastPageSwiped = true;
+                        //Next Activity here
+                        Intent intent = new Intent(QuizViewPager.this, FinalResultScreen.class);
+                        intent.putExtra("score", score);
+                        intent.putExtra("position", currentPos);
+                        intent.putExtra("question1", questions.get(0).getId());
+                        intent.putExtra("question2", questions.get(1).getId());
+                        intent.putExtra("question3", questions.get(2).getId());
+                        intent.putExtra("question4", questions.get(3).getId());
+                        intent.putExtra("question5", questions.get(4).getId());
+                        intent.putExtra("question6", questions.get(5).getId());
+                        QuizViewPager.this.startActivity( intent );
+                    }
+                    counterPageScroll++;
+                }else{
+                    counterPageScroll = 0;
+                }
             }
 
             @Override
-            public void onPageSelected(int position) {
+            public void onPageSelected(final int position) {
                 mActionBar.setTitle(mSectionsPagerAdapter.getPageTitle(position));
-                Log.d(DEBUG_TAG, "Page changed ");
+                score = countCorrect();
+                currentPos = position;
+                Log.d(DEBUG_TAG, "Correct answers " + countCorrect());
+                Log.d(DEBUG_TAG, "Page changed " + position);
             }
 
             @Override
@@ -68,6 +100,65 @@ public class QuizViewPager extends AppCompatActivity {
             }
         });
     }
+
+    // Count the number of correct answers after each page selected
+    private Integer countCorrect() {
+        int count = 0;
+        for (boolean b : numCorrect) {
+            if (b) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+//    // Execute the retrieval of the CSV file in an asynchronous way, without blocking the UI thread.
+//    // Called by DBHelper in the onCreate method bc of csv file getting needing an activity
+//    public void setInitialData() {
+//        new getIntialCSVDataTask().execute();
+//    }
+//
+//    // This is an AsyncTask class (it extends AsyncTask) to perform grab csv file data and calls
+//    // quizData to insert into db.
+//    private class getIntialCSVDataTask extends AsyncTask<Void, Void, Void> {
+//
+//        // This method will run as a background process to write into db.
+//        // It will be automatically invoked by Android, when we call the execute method
+//        // in the onCreateMethod
+//        @Override
+//        protected Void doInBackground(Void... voids) {
+//            try {
+//                // read the CSV data
+//                CSVReader reader = new CSVReader(new InputStreamReader(in_s));
+//                String[] nextLine;
+//
+//                while ((nextLine = reader.readNext()) != null) {
+//                    System.out.println("State : " + nextLine[0]);
+//                    System.out.println("Capital : " + nextLine[1]);
+//                    System.out.println("Second city : " + nextLine[2]);
+//                    System.out.println("Third city : " + nextLine[3]);
+//                    System.out.println("==========================");
+//                    ContentValues values = new ContentValues();
+//                    values.put(QuizDBHelper.QUIZQUESTIONS_COLUMN_STATE, nextLine[0]);
+//                    values.put(QuizDBHelper.QUIZQUESTIONS_COLUMN_CAPITAL, nextLine[1]);
+//                    values.put(QuizDBHelper.QUIZQUESTIONS_COLUMN_CITY1, nextLine[2]);
+//                    values.put(QuizDBHelper.QUIZQUESTIONS_COLUMN_CITY2, nextLine[3]);
+//
+//                    // Insert the new row into the database table;
+//                    // The id (primary key) is automatically generated by the database system
+//                    // and returned as from the insert method call.
+//                    quizData.insertQuestion(values);
+//                }
+//
+//                reader.close();
+//
+//            } catch (Exception e) {
+//                Log.e(DEBUG_TAG, e.toString());
+//            }
+//            Log.d(DEBUG_TAG, "getIntialCSVDataTask: quiz questions retrieved: ");
+//            return null;
+//        }
+//    }
 
     // This is an AsyncTask class (it extends AsyncTask) to perform DB writing of a job lead, asynchronously.
     private class retrieveAllQuestionsTask extends AsyncTask<Void, Void, Void> {
@@ -83,11 +174,10 @@ public class QuizViewPager extends AppCompatActivity {
             // Shuffle questions for future use (Grab first 7 to be questions)
             Collections.shuffle(questions);
 
-            Log.d(DEBUG_TAG, "getIntialCSVDataTask: quiz questions retrieved: ");
+            Log.d(DEBUG_TAG, "QUIZ VIEW PAGER: quiz questions retrieved: ");
             return null;
         }
     }
-
 
     public void loadView(TextView textView, String state, RadioButton rb1, RadioButton rb2, RadioButton rb3, List<String> choices) {
         textView.setText("What is the capital of " + state + "?");
@@ -125,10 +215,16 @@ public class QuizViewPager extends AppCompatActivity {
     public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private int questionNum; // Store 0-6 based on section number and pull from randomized questions[questionNumber]
+
         private TextView questionText;
+        private RadioGroup radioGroup;
         private RadioButton rb1;
         private RadioButton rb2;
         private RadioButton rb3;
+
+        // GET CAPITALS
+        // GET USER ANSWERS
+        // RADIO BUTTON GET ANSWER
         private Question question;
         List<String> choices = Arrays.asList("capital", "city1", "city2"); // construct list from questions.
 
@@ -165,7 +261,45 @@ public class QuizViewPager extends AppCompatActivity {
             rb1 = (RadioButton) rootView.findViewById(R.id.option1);
             rb2 = (RadioButton) rootView.findViewById(R.id.option2);
             rb3 = (RadioButton) rootView.findViewById(R.id.option3);
+            radioGroup = (RadioGroup) rootView.findViewById( R.id.radioGroup );
 
+            // Check the correct answer and modify the list of booleans at that position
+            radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    switch(checkedId){
+                        case R.id.option1:
+                            if (rb1.getText() == question.getCapital()){
+                                numCorrect.set(questionNum, true);
+                                Log.d(DEBUG_TAG, "Correct! ");
+                            }
+                            else {
+                                numCorrect.set(questionNum, false);
+                                Log.d(DEBUG_TAG, "Incorrect! ");
+                            }
+                            break;
+                        case R.id.option2:
+                            if (rb2.getText() == question.getCapital()){
+                                numCorrect.set(questionNum, true);
+                                Log.d(DEBUG_TAG, "Correct! ");
+                            }
+                            else {
+                                numCorrect.set(questionNum, false);
+                                Log.d(DEBUG_TAG, "Incorrect! ");
+                            }
+                            break;
+                        case R.id.option3:
+                            if (rb3.getText() == question.getCapital()){
+                                numCorrect.set(questionNum, true);
+                                Log.d(DEBUG_TAG, "Correct! ");
+                            }
+                            else {
+                                numCorrect.set(questionNum, false);
+                                Log.d(DEBUG_TAG, "Incorrect! ");
+                            }
+                            break;
+                    }
+                }
+            });
             return rootView;
         }
 
@@ -192,6 +326,15 @@ public class QuizViewPager extends AppCompatActivity {
             }
         }
     }
+
+//    // Save the list index selection
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putInt( "Position", currentPos);
+//        Log.d( DEBUG_TAG, "onSaveInstanceState(): saved Position: " + currentPos );
+//        outState.putParcelableArray("Questions", );
+//    }
 
     @Override
     protected void onResume() {

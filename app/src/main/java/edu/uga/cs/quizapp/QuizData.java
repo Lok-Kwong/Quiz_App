@@ -8,11 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-
-import com.opencsv.CSVReader;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,7 +76,7 @@ public class QuizData {
             if( cursor.getCount() > 0 ) {
                 while( cursor.moveToNext() ) {
                     // get all attribute values of this question
-                    long id = cursor.getLong( cursor.getColumnIndex( QuizDBHelper.QUIZQUESTIONS_COLUMN_ID ) );
+                    long id = cursor.getInt( cursor.getColumnIndex( QuizDBHelper.QUIZQUESTIONS_COLUMN_ID ) );
                     String state = cursor.getString( cursor.getColumnIndex( QuizDBHelper.QUIZQUESTIONS_COLUMN_STATE ) );
                     String capital = cursor.getString( cursor.getColumnIndex( QuizDBHelper.QUIZQUESTIONS_COLUMN_CAPITAL ) );
                     String city1 = cursor.getString( cursor.getColumnIndex(  QuizDBHelper.QUIZQUESTIONS_COLUMN_CITY1 ) );
@@ -95,7 +90,7 @@ public class QuizData {
                     Log.d( DEBUG_TAG, "Retrieved question: " + question );
                 }
             }
-            Log.d( DEBUG_TAG, "Number of records from DB: " + cursor.getCount() );
+            Log.d( DEBUG_TAG, "retrieveAllQuestions - Number of records from DB: " + cursor.getCount() );
         }
         catch( Exception e ){
             Log.d( DEBUG_TAG, "Exception caught: " + e );
@@ -173,12 +168,12 @@ public class QuizData {
                     String time = cursor.getString( cursor.getColumnIndex( QuizDBHelper.QUIZRESULTS_COLUMN_TIME ) );
                     int score = cursor.getInt( cursor.getColumnIndex( QuizDBHelper.QUIZRESULTS_COLUMN_SCORE ) );
                     int position = cursor.getInt( cursor.getColumnIndex(  QuizDBHelper.QUIZRESULTS_COLUMN_POSITION ) );
-                    String question1 = cursor.getString( cursor.getColumnIndex( QuizDBHelper.QUIZRESULTS_COLUMN_QUESTION1 ) );
-                    String question2 = cursor.getString( cursor.getColumnIndex( QuizDBHelper.QUIZRESULTS_COLUMN_QUESTION2 ) );
-                    String question3 = cursor.getString( cursor.getColumnIndex( QuizDBHelper.QUIZRESULTS_COLUMN_QUESTION3 ) );
-                    String question4 = cursor.getString( cursor.getColumnIndex( QuizDBHelper.QUIZRESULTS_COLUMN_QUESTION4 ) );
-                    String question5 = cursor.getString( cursor.getColumnIndex( QuizDBHelper.QUIZRESULTS_COLUMN_QUESTION5 ) );
-                    String question6 = cursor.getString( cursor.getColumnIndex( QuizDBHelper.QUIZRESULTS_COLUMN_QUESTION6 ) );
+                    int question1 = cursor.getInt( cursor.getColumnIndex( QuizDBHelper.QUIZRESULTS_COLUMN_QUESTION1 ) );
+                    int question2 = cursor.getInt( cursor.getColumnIndex( QuizDBHelper.QUIZRESULTS_COLUMN_QUESTION2 ) );
+                    int question3 = cursor.getInt( cursor.getColumnIndex( QuizDBHelper.QUIZRESULTS_COLUMN_QUESTION3 ) );
+                    int question4 = cursor.getInt( cursor.getColumnIndex( QuizDBHelper.QUIZRESULTS_COLUMN_QUESTION4 ) );
+                    int question5 = cursor.getInt( cursor.getColumnIndex( QuizDBHelper.QUIZRESULTS_COLUMN_QUESTION5 ) );
+                    int question6 = cursor.getInt( cursor.getColumnIndex( QuizDBHelper.QUIZRESULTS_COLUMN_QUESTION6 ) );
 
                     // create a new question object and set its state to the retrieved values
                     Result result = new Result( time, score, position, question1, question2, question3, question4, question5, question6 );
