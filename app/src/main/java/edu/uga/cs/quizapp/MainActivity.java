@@ -38,8 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Hacky solution for first time opening DB -> STARTS onCreate in QuizDBHelper
         quizData = new QuizData( this );
+        Log.d( DEBUG_TAG, "In Main, creating db" );
         quizData.open();
-        quizData.close(); // Prevents retrieving all questions before inserting
+        // Create db
     }
 
     public Context getContext() {

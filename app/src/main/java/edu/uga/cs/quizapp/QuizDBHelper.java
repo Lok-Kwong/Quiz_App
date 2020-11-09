@@ -27,7 +27,7 @@ public class QuizDBHelper extends SQLiteOpenHelper {
     private static final String DEBUG_TAG = "QuizDBHelper";
 
     private static final String DB_NAME = "quizapp.db";
-    private static final int DB_VERSION = 36;
+    private static final int DB_VERSION = 39;
 
     private QuizData quizData; // Call method to create initial data
     MainActivity MainActivity = new MainActivity();
