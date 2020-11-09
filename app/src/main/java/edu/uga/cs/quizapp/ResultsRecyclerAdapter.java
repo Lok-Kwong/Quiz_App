@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 /**
- * This is an adapter class for the RecyclerView to show all job leads.
+ * This is an adapter class for the RecyclerView to show all results
  */
 public class ResultsRecyclerAdapter extends RecyclerView.Adapter<ResultsRecyclerAdapter.ResultHolder> {
 

@@ -1,11 +1,14 @@
 package edu.uga.cs.quizapp;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * This class (a POJO) represents a single question, including the id, state, capital, city1, and city2
  * The id is -1 if the object has not been persisted in the database yet, and
  * the db table's primary key value, if it has been persisted.
  */
-public class Question {
+public class Question implements Parcelable {
     private long id;
     private String state;
     private String capital;
@@ -27,6 +30,40 @@ public class Question {
         this.city1 = city1;
         this.city2 = city2;
     }
+
+    protected Question(Parcel in) {
+        id = in.readLong();
+        state = in.readString();
+        capital = in.readString();
+        city1 = in.readString();
+        city2 = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(state);
+        dest.writeString(capital);
+        dest.writeString(city1);
+        dest.writeString(city2);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Question> CREATOR = new Creator<Question>() {
+        @Override
+        public Question createFromParcel(Parcel in) {
+            return new Question(in);
+        }
+
+        @Override
+        public Question[] newArray(int size) {
+            return new Question[size];
+        }
+    };
 
     public long getId() {
         return id;

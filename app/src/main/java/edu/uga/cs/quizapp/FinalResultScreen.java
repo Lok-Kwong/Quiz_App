@@ -14,6 +14,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * FinalResultScreen is the final screen on swipe right on question 6. Displays and stores the result and time
+ */
 public class FinalResultScreen extends AppCompatActivity {
     private static final String DEBUG_TAG = "Final result screen";
 

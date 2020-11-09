@@ -10,6 +10,9 @@ import android.util.Log;
 
 import java.util.List;
 
+/**
+ * ReviewResults creates a bunch of cardviews to display the user's results
+ */
 public class ReviewResults extends AppCompatActivity {
 
     public static final String DEBUG_TAG = "ReviewResults";

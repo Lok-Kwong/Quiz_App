@@ -1,8 +1,6 @@
 package edu.uga.cs.quizapp;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -21,10 +19,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * QuizViewPager is the acutal quiz. It creates 6 quiz question fragments with randomized
+ * state questions, randomized answer choices, and checks the answer on swipe right.
+ */
 public class QuizViewPager extends AppCompatActivity {
     private static final String DEBUG_TAG = "Quiz View Pager";
 
@@ -34,8 +37,8 @@ public class QuizViewPager extends AppCompatActivity {
     final int numberQuestions = 6;
     int currentPos = 0;
     int score = 0;
-    static List<Question> questions;
-    static List<Boolean> numCorrect = Arrays.asList(false, false, false, false, false, false);
+    static ArrayList<Question> questions;
+    static ArrayList<Boolean> numCorrect = new ArrayList<>(Arrays.asList(false, false, false, false, false, false));
 
     private QuizData quizData;
 
@@ -54,10 +57,19 @@ public class QuizViewPager extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         quizData = new QuizData( this );
-        new retrieveAllQuestionsTask().execute();
+        // savedInstanceState check
+        if (savedInstanceState == null) {
+            new retrieveAllQuestionsTask().execute();
+        }
+        else {
+            questions = savedInstanceState.getParcelableArrayList("Questions");
+            currentPos = savedInstanceState.getInt("Position");
+            score = savedInstanceState.getInt("Score");
+        }
 
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            // Checks the last swipe to submit and go to final result activity
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 //Here 5 is last position
@@ -77,7 +89,7 @@ public class QuizViewPager extends AppCompatActivity {
                         QuizViewPager.this.startActivity( intent );
                     }
                     counterPageScroll++;
-                }else{
+                } else{
                     counterPageScroll = 0;
                 }
             }
@@ -160,6 +172,7 @@ public class QuizViewPager extends AppCompatActivity {
         }
     }
 
+    // Creates the actual quiz question screen
     public static class PlaceholderFragment extends Fragment {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private int questionNum; // Store 0-6 based on section number and pull from randomized questions[questionNumber]
@@ -170,11 +183,8 @@ public class QuizViewPager extends AppCompatActivity {
         private RadioButton rb2;
         private RadioButton rb3;
 
-        // GET CAPITALS
-        // GET USER ANSWERS
-        // RADIO BUTTON GET ANSWER
         private Question question;
-        List<String> choices = Arrays.asList("capital", "city1", "city2"); // construct list from questions.
+        ArrayList<String> choices = new ArrayList<>(Arrays.asList("capital", "city1", "city2")); // construct list from questions.
 
 
         public static PlaceholderFragment newInstance(int sectionNumber) {
@@ -191,6 +201,7 @@ public class QuizViewPager extends AppCompatActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            setRetainInstance(true);
             if (getArguments() != null) {
                 questionNum = getArguments().getInt(ARG_SECTION_NUMBER); // QuestionNum grabs from question array (0-6) depending on current page
                 // give random order to list
@@ -262,6 +273,7 @@ public class QuizViewPager extends AppCompatActivity {
             }
         }
 
+        // Randomizes the answers set into the radio btns
         public void randomizeChoices() {
             int capitalIndex = choices.indexOf("capital"); // Find where capital, city1, and city2 is and put the respective answers into that index
             int city1Index = choices.indexOf("city1"); // 1
@@ -275,14 +287,17 @@ public class QuizViewPager extends AppCompatActivity {
         }
     }
 
-//    // Save the list index selection
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        outState.putInt( "Position", currentPos);
-//        Log.d( DEBUG_TAG, "onSaveInstanceState(): saved Position: " + currentPos );
-//        outState.putParcelableArray("Questions", );
-//    }
+    // Save the current question selections, current position, and score
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt( "Position", currentPos);
+        Log.d( DEBUG_TAG, "onSaveInstanceState(): saved Position: " + currentPos );
+        outState.putParcelableArrayList("Questions", questions);
+        outState.putInt( "Score", score);
+        Log.d( DEBUG_TAG, "onSaveInstanceState(): saved score: " + score );
+//        outState.putBooleanArray("Choices", numCorrect); // SAVE CHOICES???
+    }
 
     @Override
     protected void onResume() {

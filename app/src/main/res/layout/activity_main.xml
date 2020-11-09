@@ -54,7 +54,7 @@
         android:id="@+id/textView2"
         android:layout_width="278dp"
         android:layout_height="113dp"
-        android:text="Can you name all the capitals of each state in the US? Click start quiz to find out!"
+        android:text="Can you name all the capitals of each state in the US? Click start quiz to find out! Swipe right to continue onto the next question."
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

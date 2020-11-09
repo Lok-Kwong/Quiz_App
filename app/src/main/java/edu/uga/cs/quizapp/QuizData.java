@@ -63,7 +63,7 @@ public class QuizData {
     // Retrieve all the questions and return them as a List.
     // This is how we restore persistent objects stored as rows in the quizQuestions table in the database.
     // For each retrieved row, we create a new question (Java POJO object) instance and add it to the list.
-    public List<Question> retrieveAllQuestions() {
+    public ArrayList<Question> retrieveAllQuestions() {
         ArrayList<Question> questions = new ArrayList<>();
         Cursor cursor = null;
 
